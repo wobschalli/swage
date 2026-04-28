@@ -1,0 +1,13 @@
+<% module_namespacing do -%>
+class <%= class_name %> < ApplicationRecord
+<% attributes.select(&:reference?).each do |attribute| -%>
+  belongs_to :<%= attribute.name %><%= ', polymorphic: true' if attribute.polymorphic? %>
+<% end -%>
+<% attributes.select(&:token?).each do |attribute| -%>
+  has_secure_token<%= " :#{attribute.name}" unless attribute.name == "token" %>
+<% end -%>
+<% attributes.select(&:password_digest?).each do |attribute| -%>
+  has_secure_password
+<% end -%>
+end
+<% end -%>

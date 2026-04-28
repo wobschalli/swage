@@ -1,0 +1,21 @@
+module Views
+  module <%= controller_class_name %>
+    class New < ApplicationView
+      include Phlexible::Callbacks
+
+      def initialize(<%= singular_table_name %>:)
+        @<%= singular_table_name %> = <%= singular_table_name %>
+      end
+
+      def template
+        div(class: "mx-auto md:w-2/3 w-full px-8") do
+          h1(class: "font-bold text-4xl mb-10") { "New <%= human_name.downcase %>" }
+
+          render Form.new(<%= singular_table_name %>: @<%= singular_table_name %>)
+
+          a(href: helpers.<%= plural_table_name %>_path, class: "block mt-6 text-gray-600 hover:underline") { "Back to <%= human_name.pluralize.downcase %>" }
+        end
+      end
+    end
+  end
+end
