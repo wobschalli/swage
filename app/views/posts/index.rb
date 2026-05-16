@@ -1,6 +1,7 @@
 module Views
   module Posts
     class Index < Views::Base
+      include Phlexible::Rails::AutoLayout
       def initialize(posts: nil)
         @posts = posts
       end

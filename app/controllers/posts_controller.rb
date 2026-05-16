@@ -26,7 +26,7 @@ class PostsController < ApplicationController
     if save Views::Posts::Form.new(@post)
       redirect_to @post, notice: "Post was successfully created."
     else
-      render :new, status: :unprocessable_entity
+      render Views::Posts::New, status: :unprocessable_entity
     end
   end
 
@@ -35,7 +35,7 @@ class PostsController < ApplicationController
     if save! Views::Posts::Form.new(@post)
       redirect_to @post, notice: "Post was successfully updated.", status: :see_other
     else
-      render :edit, status: :unprocessable_entity
+      render Views::Posts::Edit, status: :unprocessable_entity
     end
   end
 

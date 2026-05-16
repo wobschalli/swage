@@ -21,12 +21,12 @@ class UsersController < ApplicationController
 
   # POST /users
   def create
-    @user = User.new(user_params)
+    @user = User.new
 
     if save Views::Users::Form.new(@user)
       redirect_to @user, notice: "User was successfully created."
     else
-      render :new, status: :unprocessable_entity
+      render Views::Users::New, status: :unprocessable_entity
     end
   end
 
@@ -35,7 +35,7 @@ class UsersController < ApplicationController
     if save! Views::Users::Form.new(@user)
       redirect_to @user, notice: "User was successfully updated.", status: :see_other
     else
-      render :edit, status: :unprocessable_entity
+      render Views::Users::Edit, status: :unprocessable_entity
     end
   end
 

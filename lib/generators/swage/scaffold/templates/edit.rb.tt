@@ -1,6 +1,8 @@
 module Views
   module <%= controller_class_name %>
     class Edit < Views::Base
+      include Phlexible::Rails::AutoLayout
+
       def initialize(<%= singular_table_name %>: nil)
         @<%= singular_table_name %> = <%= singular_table_name %>
       end
@@ -9,14 +11,14 @@ module Views
 
       def view_template
         div(class: "mx-auto md:w-2/3 w-full px-8") do
-          h1(class: "font-bold text-4xl mb-10") { "Editing <%= human_name.downcase %>" }
+          Heading(level: 1) { "Editing <%= human_name.downcase %>" }
 
           render Form.new(@<%= singular_table_name %>)
 
           div(class: "mt-6 flex gap-4") do
-            a(href: helpers.<%= singular_table_name %>_path(@<%= singular_table_name %>), class: "text-blue-600 hover:underline") { "Show this <%= human_name.downcase %>" }
+            Link(href: helpers.<%= singular_table_name %>_path(@<%= singular_table_name %>)) { "Show this <%= human_name.downcase %>" }
             span(class: "text-gray-300") { "|" }
-            a(href: helpers.<%= plural_table_name %>_path, class: "text-gray-600 hover:underline") { "Back to <%= human_name.pluralize.downcase %>" }
+            Link(href: helpers.<%= plural_table_name %>_path) { "Back to <%= human_name.pluralize.downcase %>" }
           end
         end
       end

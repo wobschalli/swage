@@ -26,12 +26,12 @@ class <%= controller_class_name %>Controller < ApplicationController
 
   # POST <%= route_url %>
   def create
-    @<%= singular_table_name %> = <%= orm_class.build(class_name, "#{singular_table_name}_params") %>
+    @<%= singular_table_name %> = <%= orm_class.build(class_name) %>
 
     if save Views::<%= controller_class_name %>::Form.new(@<%= singular_table_name %>)
       redirect_to @<%= singular_table_name %>, notice: <%= "\"#{human_name} was successfully created.\"" %>
     else
-      render :new, status: :unprocessable_entity
+      render Views::<%= controller_class_name %>::New, status: :unprocessable_entity
     end
   end
 
@@ -40,7 +40,7 @@ class <%= controller_class_name %>Controller < ApplicationController
     if save! Views::<%= controller_class_name %>::Form.new(@<%= singular_table_name %>)
       redirect_to @<%= singular_table_name %>, notice: <%= "\"#{human_name} was successfully updated.\"" %>, status: :see_other
     else
-      render :edit, status: :unprocessable_entity
+      render Views::<%= controller_class_name %>::Edit, status: :unprocessable_entity
     end
   end
 

@@ -7,6 +7,7 @@ module Views
         FormField do
           FormFieldLabel { "Password" }
           Field(:password).password
+          FormFieldError { model.errors[:password].map { "Password #{it}" }.join("\n") }
         end
         FormField do
           FormFieldLabel { "Password Confirmation" }
@@ -15,6 +16,7 @@ module Views
         FormField do
           FormFieldLabel { "<%= attribute.column_name %>" }
           Field(:<%= attribute.column_name %>).file
+          FormFieldError { model.errors[:<%= attribute.column_name %>].map{ "<%= attribute.human_name %> #{it}" }.join("\n") }
         end
 <% else -%>
         FormField do
@@ -27,6 +29,7 @@ module Views
           Field(:<%= attribute.column_name %>).input(type: :<%= attribute.field_type %>)
 <% end -%>
 <% end -%>
+          FormFieldError { model.errors[:<%= attribute.password_digest? ? "password_confirmation" : attribute.column_name %>].map { "<%= attribute.human_name %> #{it}" }.join("\n") }
         end
 <% end -%>
         div(class: "inline") do

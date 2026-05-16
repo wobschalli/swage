@@ -1,6 +1,7 @@
 module Views
   module Posts
     class New < Views::Base
+      include Phlexible::Rails::AutoLayout
       def initialize(post: nil)
         @post = post
       end

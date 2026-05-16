@@ -1,0 +1,26 @@
+# frozen_string_literal: true
+
+Rails.application.config.generators do |g|
+  g.scaffold_controller :swage
+
+  g.fallbacks[:swage] = :scaffold_controller
+end
+
+module Phlexible::Rails::ButtonToConcerns
+  # use consistent ui components
+  def view_template(&block)
+    action = url_for(@url)
+    @options = DEFAULT_OPTIONS.merge((@options || {}).symbolize_keys)
+
+    method = (@options.delete(:method).presence || method_for_options(@options)).to_s
+    form_method = method == "get" ? "get" : "post"
+
+    form action: action, method: form_method, **form_attributes do
+      method_tag method
+      form_method == "post" && token_input(action, method.empty? ? "post" : method)
+      param_inputs
+
+      block_given? ? RubyUI::Button(**button_attrs, &block) : RubyUI::Button(**button_attrs) { @name }
+    end
+  end
+end

@@ -1,0 +1,5 @@
+Description:
+    Replaces the default rails scaffold controller to generate phlex views
+
+Example:
+    bin/rails generate flex Thing
