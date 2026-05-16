@@ -1,17 +1,17 @@
 module Views
   module <%= controller_class_name %>
-    class Edit < ApplicationView
-      include Phlexible::Callbacks
-
-      def initialize(<%= singular_table_name %>:)
+    class Edit < Views::Base
+      def initialize(<%= singular_table_name %>: nil)
         @<%= singular_table_name %> = <%= singular_table_name %>
       end
 
-      def template
+      controller_variable :<%= singular_table_name %>
+
+      def view_template
         div(class: "mx-auto md:w-2/3 w-full px-8") do
           h1(class: "font-bold text-4xl mb-10") { "Editing <%= human_name.downcase %>" }
 
-          render Form.new(<%= singular_table_name %>: @<%= singular_table_name %>)
+          render Form.new(@<%= singular_table_name %>)
 
           div(class: "mt-6 flex gap-4") do
             a(href: helpers.<%= singular_table_name %>_path(@<%= singular_table_name %>), class: "text-blue-600 hover:underline") { "Show this <%= human_name.downcase %>" }

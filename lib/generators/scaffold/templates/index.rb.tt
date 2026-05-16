@@ -1,13 +1,13 @@
 module Views
   module <%= controller_class_name %>
-    class Index < ApplicationView
-      include Phlexible::Callbacks
-
-      def initialize(<%= plural_table_name %>:)
+    class Index < Views::Base
+      def initialize(<%= plural_table_name %>: nil)
         @<%= plural_table_name %> = <%= plural_table_name %>
       end
 
-      def template
+      controller_variable :<%= plural_table_name %>
+
+      def view_template
         div(class: "w-full px-8") do
           if helpers.notice.present?
             p(class: "py-2 px-3 bg-green-50 mb-5 text-green-700 font-medium rounded-lg inline-block", id: "notice") { helpers.notice }
@@ -15,7 +15,9 @@ module Views
 
           div(class: "flex justify-between items-center mb-10") do
             h1(class: "font-bold text-4xl") { "<%= human_name.pluralize %>" }
-            render NewLink.new
+            a(href: new_<%= singular_table_name %>_path,
+              class: "rounded-lg py-3 px-5 bg-blue-600 text-white block font-medium hover:bg-blue-700 transition"
+            ) { "New <%= human_name.downcase %>" }
           end
 
           div(id: "<%= plural_table_name %>", class: "min-w-full divide-y divide-gray-200") do
@@ -23,17 +25,6 @@ module Views
               render Partial.new(<%= singular_table_name %>: <%= singular_table_name %>)
             end
           end
-        end
-      end
-
-      private
-
-      class NewLink < ApplicationView
-        def template
-          a(
-            href: helpers.new_<%= singular_table_name %>_path,
-            class: "rounded-lg py-3 px-5 bg-blue-600 text-white block font-medium hover:bg-blue-700 transition"
-          ) { "New <%= human_name.downcase %>" }
         end
       end
     end

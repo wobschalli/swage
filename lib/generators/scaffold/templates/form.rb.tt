@@ -1,41 +1,36 @@
 module Views
   module <%= controller_class_name %>
-    class Form < ApplicationView
-      include Phlexible::Callbacks
-
-      def initialize(<%= singular_table_name %>:)
-        @<%= singular_table_name %> = <%= singular_table_name %>
-      end
-
-      def template
-        helpers.form_with(model: @<%= singular_table_name %>, class: "contents") do |f|
-          if @<%= singular_table_name %>.errors.any?
-            div(id: "error_explanation", class: "bg-red-50 text-red-500 px-3 py-2 font-medium rounded-lg mt-3") do
-              h2 { "#{helpers.pluralize(@<%= singular_table_name %>.errors.count, "error")} prohibited this <%= singular_table_name %> from being saved:" }
-              ul(class: "list-disc ml-6 mt-2") do
-                @<%= singular_table_name %>.errors.each do |error|
-                  li { error.full_message }
-                end
-              end
-            end
-          end
-
-          <% attributes.each do |attribute| -%>
-          div(class: "my-5") do
-            f.label :<%= attribute.name %>, class: "block font-medium mb-1 text-gray-700"
-            <% if attribute.type == :text -%>
-            f.text_area :<%= attribute.name %>, rows: 4, class: "block shadow-sm rounded-md border border-gray-300 outline-none px-3 py-2 mt-1 w-full focus:ring-blue-500 focus:border-blue-500"
-            <% elsif attribute.type == :boolean -%>
-            f.check_box :<%= attribute.name %>, class: "block mt-1 h-5 w-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-            <% else -%>
-            f.<%= attribute.field_type %> :<%= attribute.name %>, class: "block shadow-sm rounded-md border border-gray-300 outline-none px-3 py-2 mt-1 w-full focus:ring-blue-500 focus:border-blue-500"
-            <% end -%>
-          end
-
-          <% end -%>
-          div(class: "inline") do
-            f.submit class: "rounded-lg py-3 px-5 bg-blue-600 text-white inline-block font-medium cursor-pointer hover:bg-blue-700 transition"
-          end
+    class Form < Components::Form
+      def view_template
+<% attributes.each do |attribute| -%>
+<% if attribute.password_digest? -%>
+        FormField do
+          FormFieldLabel { "Password" }
+          Field(:password).password
+        end
+        FormField do
+          FormFieldLabel { "Password Confirmation" }
+          Field(:password_confirmation).password
+<% elsif attribute.attachments? -%>
+        FormField do
+          FormFieldLabel { "<%= attribute.column_name %>" }
+          Field(:<%= attribute.column_name %>).file
+        end
+<% else -%>
+        FormField do
+          FormFieldLabel { "<%= attribute.column_name %>" }
+<% if attribute.field_type == :textarea || attribute.field_type == :text_area -%>
+          Field(:<%= attribute.column_name %>).textarea
+<% elsif attribute.field_type == :checkbox || attribute.field_type == :check_box -%>
+          Field(:<%= attribute.column_name %>).checkbox
+<% else -%>
+          Field(:<%= attribute.column_name %>).input(type: :<%= attribute.field_type %>)
+<% end -%>
+<% end -%>
+        end
+<% end -%>
+        div(class: "inline") do
+          submit
         end
       end
     end

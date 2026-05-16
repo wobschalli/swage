@@ -1,13 +1,13 @@
 module Views
   module <%= controller_class_name %>
-    class Show < ApplicationView
-      include Phlexible::Callbacks
-
-      def initialize(<%= singular_table_name %>:)
+    class Show < Views::Base
+      def initialize(<%= singular_table_name %>: nil)
         @<%= singular_table_name %> = <%= singular_table_name %>
       end
 
-      def template
+      controller_variable :<%= singular_table_name %>
+
+      def view_template
         div(class: "mx-auto md:w-2/3 w-full px-8") do
           if helpers.notice.present?
             p(class: "py-2 px-3 bg-green-50 mb-5 text-green-700 font-medium rounded-lg inline-block", id: "notice") { helpers.notice }
@@ -16,16 +16,15 @@ module Views
           render Partial.new(<%= singular_table_name %>: @<%= singular_table_name %>)
 
           div(class: "mt-8 flex gap-4 border-t pt-6") do
-            a(href: helpers.edit_<%= singular_table_name %>_path(@<%= singular_table_name %>), class: "rounded-lg py-3 px-5 bg-gray-100 font-medium hover:bg-gray-200 transition") { "Edit this <%= human_name.downcase %>" }
-            a(href: helpers.<%= plural_table_name %>_path, class: "rounded-lg py-3 px-5 bg-white border font-medium hover:bg-gray-50 transition") { "Back to <%= human_name.pluralize.downcase %>" }
+            a(href: edit_<%= singular_table_name %>_path(@<%= singular_table_name %>), class: "rounded-lg py-3 px-5 bg-gray-100 font-medium hover:bg-gray-200 transition") { "Edit this <%= human_name.downcase %>" }
+            a(href: <%= plural_table_name %>_path, class: "rounded-lg py-3 px-5 bg-white border font-medium hover:bg-gray-50 transition") { "Back to <%= human_name.pluralize.downcase %>" }
             
-            helpers.button_to(
-              "Destroy",
-              helpers.<%= singular_table_name %>_path(@<%= singular_table_name %>),
+            Phlexible::Rails::ButtonTo.new(
+              <%= singular_table_name %>_path(@<%= singular_table_name %>),
               method: :delete,
-              form: { class: "inline" },
+              form_attributes: { class: "inline" },
               class: "rounded-lg py-3 px-5 bg-red-50 text-red-600 font-medium hover:bg-red-100 transition cursor-pointer"
-            )
+            ) { "Destroy" }
           end
         end
       end

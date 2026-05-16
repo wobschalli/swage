@@ -1,6 +1,5 @@
 class ScaffoldGenerator < Rails::Generators::NamedBase
   include Rails::Generators::ResourceHelpers
-  raise "Use old scaffold, at least for the project"
   source_root File.expand_path("templates", __dir__)
 
   argument :attributes, type: :array, default: [], banner: "field:type field:type"
@@ -21,9 +20,5 @@ class ScaffoldGenerator < Rails::Generators::NamedBase
 
   def create_model_files
     template "model.rb.tt", File.join("app/models", "#{file_name}.rb")
-  end
-
-  def create_helper_files
-    template "helper.rb.tt", File.join("app/helpers", "#{controller_file_path}_helper.rb")
   end
 end

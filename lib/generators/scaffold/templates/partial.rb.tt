@@ -1,26 +1,26 @@
 module Views
   module <%= controller_class_name %>
-    class Partial < ApplicationView
-      include Phlexible::Callbacks
+    class Partial < Views::Base
+      include Phlex::Rails::Helpers::DOMID
 
-      def initialize(<%= singular_table_name %>:)
+      def initialize(<%= singular_table_name %>: nil)
         @<%= singular_table_name %> = <%= singular_table_name %>
       end
 
-      def template
+      def view_template
         div(id: helpers.dom_id(@<%= singular_table_name %>), class: "py-6 flex justify-between items-center") do
           div do
-            <% attributes.each do |attribute| -%>
+<% attributes.delete_if{ it.name == "password" }.each do |attribute| -%>
             div(class: "mb-2") do
               strong(class: "block text-xs uppercase tracking-wide text-gray-500") { "<%= attribute.human_name %>" }
               p(class: "text-lg") { @<%= singular_table_name %>.<%= attribute.name %>.to_s }
             end
-            <% end -%>
+<% end -%>
           end
 
           div(class: "flex gap-4") do
-            a(href: helpers.<%= singular_table_name %>_path(@<%= singular_table_name %>), class: "text-blue-600 hover:text-blue-800 font-medium") { "View" }
-            a(href: helpers.edit_<%= singular_table_name %>_path(@<%= singular_table_name %>), class: "text-gray-600 hover:text-gray-800 font-medium") { "Edit" }
+            a(href: <%= singular_table_name %>_path(@<%= singular_table_name %>), class: "text-blue-600 hover:text-blue-800 font-medium") { "View" }
+            a(href: edit_<%= singular_table_name %>_path(@<%= singular_table_name %>), class: "text-gray-600 hover:text-gray-800 font-medium") { "Edit" }
           end
         end
       end
