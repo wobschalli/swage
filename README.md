@@ -1,11 +1,17 @@
 # Swage
-:0
+Basically a different implementation of [Superview](https://github.com/rubymonolith/superview), but with a few extra goodies and generators baked in. Use [Phlex](https://github.com/yippee-fun/phlex-rails/) for rendering views and [Superform](https://github.com/rubymonolith/superform/) for the form DSL and strong parameters. Uses [RubyUI](https://github.com/ruby-ui/ruby_ui) for the base UI components and [Phlexible](https://github.com/joelmoss/phlexible) to glue everything together (along with a lot of monkeypatching).
 
-A gem gluing together [Phlex](https://github.com/yippee-fun/phlex-rails/), [RubyUI](https://github.com/ruby-ui/ruby_ui), and [Superform](https://github.com/rubymonolith/superform/) via [Phlexible](https://github.com/joelmoss/phlexible) and a lot of monkeypatching.
+## Installation
+Simply run `rails g swage:install`, and all of the necessary components will be generated. Please not this might take a while to run.
+
+## Usage
+By default Swage will hook into the rails scaffold engine. However, it is a drop-in replacement for the erb scaffold_controller, meaning it can be used in the exact same way.
+
+## Modification
+If you wish to modify the generators, use `rails g swage:generators` to generate all of the scaffold and install generators/templates.
 
 
 ## TODO
-* Find a way to copy a bunch of the necessary files, such as `app/controllers/application_controller.rb` or `app/views/base.rb` so that they don't get overridden when installing Superform or RubyUI
 * Actually make it into a gem by adding the proper files and removing the unnecessary ones
     * Also adding an install script would be really good
     * Remove unnecessary gems
