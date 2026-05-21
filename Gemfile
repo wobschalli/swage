@@ -62,7 +62,7 @@ end
 
 gem "phlex-rails", "~> 2.4"
 gem "ransack", "~> 4.4"
-gem "phlexible", "~> 3.3"
+gem "phlexible", "~> 3.5"
 gem "phlex-icons", "~> 2.56"
 gem "ruby_ui", "~> 1.2"
 
