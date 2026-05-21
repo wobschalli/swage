@@ -4,6 +4,14 @@ module Swage::Generators
   class InstallGenerator < ::Rails::Generators::Base
     source_root File.expand_path("templates", __dir__)
 
+    def check_for_js
+      unless using_importmap? || using_bun? || using_yarn? || using_npm? || using_pnpm?
+        if yes?("No javascript package manager was detected. Do you wish to exit now, or continue and install missing requirements manually?")
+          exit 0
+        end
+      end
+    end
+
     def add_dependencies
       deps = %W[ tailwindcss-rails phlex-rails phlexible superform ruby_ui ]
       missing = []
@@ -21,7 +29,7 @@ module Swage::Generators
         if yes?("would you like to automatically install the missing dependencies?")
           add_source "https://rubygems.org" do
             deps.each do |d|
-              gem d, group: d == "ruby_ui" ? :development : %i[ development, testing, production ]
+              gem d
             end
           end
         else
@@ -59,6 +67,31 @@ module Swage::Generators
 
     def create_base_form
       template "form.rb.tt", File.join(destination_root, "app/components/form.rb"), force: true
+    end
+
+    def modify_application_controller
+      template "application_controller.rb.tt", File.join(destination_root, "app/controllers/application_controller.rb")
+    end
+
+    private # copied from ruby_ui installer since that's what it uses
+    def using_importmap?
+      File.exist?(Rails.root.join("config/importmap.rb")) && File.exist?(Rails.root.join("bin/importmap"))
+    end
+
+    def using_bun?
+      File.exist?(Rails.root.join("bun.lock"))
+    end
+
+    def using_npm?
+      File.exist?(Rails.root.join("package-lock.json"))
+    end
+
+    def using_pnpm?
+      File.exist?(Rails.root.join("pnpm-lock.yaml"))
+    end
+
+    def using_yarn?
+      File.exist?(Rails.root.join("yarn.lock"))
     end
   end
 end
