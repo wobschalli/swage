@@ -13,6 +13,5 @@ If you wish to modify the generators, use `rails g swage:generators` to generate
 
 ## TODO
 * Actually make it into a gem by adding the proper files and removing the unnecessary ones
-    * Also adding an install script would be really good
     * Remove unnecessary gems
 * Consolidate the Tailwind classes down for the non-RubyUI components
