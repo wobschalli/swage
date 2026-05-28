@@ -6,8 +6,6 @@ group :development do
   gem "foreman" # necessary for tailwind
   gem "ruby-lsp"
   gem "bundler-audit"
-  gem "brakeman"
-  gem "bundler-audit"
 end
 
 gem "tailwindcss-rails", "~> 4.4.0"
