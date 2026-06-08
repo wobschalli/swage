@@ -32,6 +32,19 @@ module Swage::Generators
       end
     end
 
+    def create_controller_files
+      base = File.join "generators", "swage", "controller"
+      Dir.chdir("#{source_paths.first}/../controller") do
+        lib File.join(base, "controller_generator.rb"), file.open("controller_generator.rb", "r").read
+      end
+
+      Dir.chdir("#{source_paths.first}/../controller/templates") do
+        Dir.glob("*.rb.tt").each do |template|
+          lib File.join(base, "templates", template), File.open(template, "r").read
+        end
+      end
+    end
+
     def create_base_generator
       base = File.join "generators", "swage"
       Dir.chdir("#{source_paths.first}/..") do
