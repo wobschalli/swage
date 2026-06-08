@@ -36,24 +36,35 @@ module Swage::Generators
           exit 1
         end
       end
+    end
 
+    def install_tailwind
       say "install tailwind"
       execute_command "rake", "tailwindcss:install"
+    end
 
+    def install_phlex
       say "install phlex"
       generate "phlex:install"
+    end
 
+    def install_superform
       say "install superform"
       generate "superform:install"
+    end
 
+    def insatll_ruby_ui
       say "install rubyui"
       generate "ruby_ui:install"
       generate "ruby_ui:component:all"
+    end
 
-      say "install swage"
+    def install_tw_animate_css # because this file is usually missing while installing ruby_ui
+      template "tw-animate-css.js.tt", File.join(destination_root, "vendor/javascript/tw-animate-css.js")
     end
 
     def create_initializer
+      say "install swage"
       template "swage.rb.tt", File.join(destination_root, "config/initializers/swage.rb"), force: true
     end
 
