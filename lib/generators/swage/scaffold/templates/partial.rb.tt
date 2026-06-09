@@ -8,7 +8,7 @@ module Views
       end
 
       def view_template
-        div(id: helpers.dom_id(@<%= singular_table_name %>), class: "py-6 flex justify-between items-center") do
+        div(id: dom_id(@<%= singular_table_name %>), class: "py-6 flex justify-between items-center") do
           div do
 <% attributes.delete_if{ it.name == "password" }.each do |attribute| -%>
             div(class: "mb-2") do

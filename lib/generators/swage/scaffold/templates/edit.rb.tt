@@ -16,9 +16,9 @@ module Views
           render Form.new(@<%= singular_table_name %>)
 
           div(class: "mt-6 flex gap-4") do
-            Link(href: helpers.<%= singular_table_name %>_path(@<%= singular_table_name %>)) { "Show this <%= human_name.downcase %>" }
+            Link(href: <%= singular_table_name %>_path(@<%= singular_table_name %>)) { "Show this <%= human_name.downcase %>" }
             span(class: "text-gray-300") { "|" }
-            Link(href: helpers.<%= plural_table_name %>_path) { "Back to <%= human_name.pluralize.downcase %>" }
+            Link(href: <%= plural_table_name %>_path) { "Back to <%= human_name.pluralize.downcase %>" }
           end
         end
       end
