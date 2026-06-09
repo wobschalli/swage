@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "phlexible"
+
 Rails.application.config.generators do |g|
   g.scaffold_controller :swage
 

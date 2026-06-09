@@ -28,7 +28,6 @@ module Swage::Generators
       end
     end
 
-
     def check_for_js
       return if @engine # engines don't have their own js ecosystem
       unless using_importmap? || using_bun? || using_yarn? || using_npm? || using_pnpm?
@@ -59,6 +58,15 @@ module Swage::Generators
         else
           exit 1
         end
+      end
+
+      # because rails is silly and won't let you do stuff unless you have everything as a gem already
+      return if @engine && !@override
+      add_source "https://rubygems.org" do
+        gem "tailwindcss-rails"
+        gem "phlex"
+        gem "superform"
+        # gem "rogue"
       end
     end
 
@@ -114,15 +122,15 @@ module Swage::Generators
       template "application_controller.rb.tt", File.join(destination_root, "app/controllers/application_controller.rb") if @override
     end
 
+    def create_application_view
+      remove_file File.join(destination_root, "app/views/layouts/application.html.erb")
+      template "application_view.rb.tt", File.join(destination_root, "app/views/layouts/application.rb") if @override
+    end
+
     def modify_engine
       return unless @engine
       @name ||= get_name
       template "engine.rb.tt", File.join(destination_root, "lib", get_name, "engine.rb")
-    end
-
-    def fix_initializer # require phlexible to make sure it's loaded before modifying the function
-      return unless @engine
-      insert_into_file "config/initializers/swage.rb", "\n\nrequire \"phlexible\"", after: "# frozen_string_literal: true"
     end
 
     private # copied from ruby_ui installer since that's what it uses
@@ -149,8 +157,8 @@ module Swage::Generators
     def probably_engine?
       @name = get_name
 
-      Dir.glob(File.join(destination_root, "test", "dummy")).empty? ||
-      Dir.glob(File.join(destination_root, "*.gemspec")).empty? ||
+      # Dir.glob(File.join(destination_root, "test", "dummy")).empty? ||
+      # Dir.glob(File.join(destination_root, "*.gemspec")).empty? ||
       File.exist?(File.join(destination_root, "lib", @name, "engine.rb")) ||
       File.exist?(File.join(destination_root, "lib", @name, "railtie.rb"))
     end
