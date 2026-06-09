@@ -15,7 +15,7 @@ module Views
 
           render Form.new(@<%= singular_table_name %>)
 
-          Link(href: helpers.<%= plural_table_name %>_path) { "Back to <%= human_name.pluralize.downcase %>" }
+          Link(href: <%= plural_table_name %>_path) { "Back to <%= human_name.pluralize.downcase %>" }
         end
       end
     end
