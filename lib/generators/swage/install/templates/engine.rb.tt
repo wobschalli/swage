@@ -1,0 +1,25 @@
+module <%= @name.capitalize %>
+  class Engine < ::Rails::Engine
+    initializer "<%= @name %>.set_autoloading" do
+      module ::Views; end
+
+      Rails.autoloaders.main.push_dir root.join("app/views"), namespace: ::Views
+    end
+
+    # Uncomment to automatically include migrations into the application's migration path
+    # This avoids copying migrations to the main application
+    # initializer "<%= @name %>.add_migrations" do |app|
+    #   unless app.root.to_s == root.to_s
+    #     config.paths["db/migrate"].expanded.each do |expanded_path|
+    #       app.config.paths["db/migrate"] << expanded_path
+    #     end
+    #   end
+    # end
+
+    config.generators do |g|
+      g.scaffold_controller :swage
+
+      g.fallbacks[:swage] = :scaffold_controller
+    end
+  end
+end

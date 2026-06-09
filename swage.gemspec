@@ -25,8 +25,10 @@ Gem::Specification.new do |spec|
 
   spec.require_paths = [ "lib" ]
 
+  spec.add_runtime_dependency "phlex"
   spec.add_runtime_dependency "phlex-rails"
   spec.add_runtime_dependency "phlexible"
   spec.add_runtime_dependency "tailwindcss-rails"
   spec.add_runtime_dependency "superform"
+  spec.add_runtime_dependency "ruby_ui"
 end
