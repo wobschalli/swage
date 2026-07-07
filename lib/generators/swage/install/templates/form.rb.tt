@@ -24,7 +24,7 @@ module Components
 
       def select(*options, multiple: false, **attributes, &)
         attributes.merge! dom_hash(field.dom)
-        if mutliple
+        if multiple
           CheckboxGroup do
             options.each do |opt|
               div class: "flex flex-col gap-2" do
