@@ -2,7 +2,6 @@ module Views
   module <%= controller_class_name %>
     class Show < Views::Base
       include Phlexible::Rails::AutoLayout
-      include Phlex::Rails::Helpers::Notice
 
       def initialize(<%= singular_table_name %>: nil)
         @<%= singular_table_name %> = <%= singular_table_name %>
@@ -12,10 +11,6 @@ module Views
 
       def view_template
         div(class: "mx-auto md:w-2/3 w-full px-8") do
-          if notice.present?
-            Text(id: "notice") { notice }
-          end
-
           render Partial.new(<%= singular_table_name %>: @<%= singular_table_name %>)
 
           div(class: "mt-8 flex gap-4 border-t pt-6") do

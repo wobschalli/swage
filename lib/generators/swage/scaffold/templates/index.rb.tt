@@ -2,7 +2,6 @@ module Views
   module <%= controller_class_name %>
     class Index < Views::Base
       include Phlexible::Rails::AutoLayout
-      include Phlex::Rails::Helpers::Notice
 
       def initialize(<%= plural_table_name %>: nil)
         @<%= plural_table_name %> = <%= plural_table_name %>
@@ -12,10 +11,6 @@ module Views
 
       def view_template
         div(class: "w-full px-8") do
-          if notice.present?
-            Text(id: "notice") { notice }
-          end
-
           div(class: "flex justify-between items-center mb-10") do
             Heading(level: 1) { "<%= human_name.pluralize %>" }
             Link(href: new_<%= singular_table_name %>_path) { "New <%= human_name.downcase %>" }
