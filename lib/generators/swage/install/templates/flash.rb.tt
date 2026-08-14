@@ -1,0 +1,52 @@
+# frozen_string_literal: true
+
+module Components
+  class Flash < Components::Base
+    def initialize(flash)
+      @flash = flash
+    end
+
+    # currently doesn't have a close button, but can add it later
+    def view_template(&)
+      div id: "notices" do
+        if block_given?
+          yield
+        else
+          @flash.each do |type, message|
+            var = convert_variants(type)
+            RubyUI::Alert(variant: var) do
+              RubyUI::AlertTitle { variant_title(var) }
+              RubyUI::AlertDescription() { message }
+            end
+          end
+        end
+      end
+    end
+
+    private
+    def convert_variants(var)
+      var = var.to_sym
+      var = case var
+      when :danger, :error, :alert
+        :destructive
+      when :info
+        nil
+      when :notice
+        :success
+      else
+        var
+      end
+    end
+
+    def variant_title(var)
+      case var
+      when nil
+        "Notice"
+      when :destructive
+        "Error"
+      else
+        var.to_s.capitalize
+      end
+    end
+  end
+end

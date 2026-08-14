@@ -26,3 +26,15 @@ module Phlexible::Rails::ButtonToConcerns
     end
   end
 end
+
+module Superform::Rails::StrongParameters
+  protected
+  # don't change passwords if they're blank
+  def permit(form)
+    form_params = params.require(form.key).delete_if do
+      (_1.to_s == "password" || _1.to_s == "password_confirmation") && (_2.nil? || _2.empty?)
+    end
+    assign(form_params, to: form).model
+  end
+end
+

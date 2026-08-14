@@ -22,24 +22,59 @@ module Components
           RubyUI::Textarea.new(**attributes) { attributes[:value] }
       end
 
-      def select(*options, multiple: false, **attributes, &)
+      # options is an array of [ label, value ] pairs
+      def select(options, preselect: nil, **attributes)
         attributes.merge! dom_hash(field.dom)
-        if mutliple
-          CheckboxGroup do
-            options.each do |opt|
-              div class: "flex flex-col gap-2" do
-                div class: "flex flex-row items-center gap-2" do
-                  RubyUI::Checkbox(*attributes, id: "select_#{opt}")
-                  FormFieldLabel(for: "select_#{opt}") { opt.capitalize }
-                end
+        attributes[:value] = preselect[1] if preselect
+        RubyUI::Select() do
+          RubyUI::SelectInput(**attributes)
+
+          disabled = {
+            disabled: true,
+            aria: { disabled: "true" }
+          } if attributes[:disabled]
+          RubyUI::SelectTrigger(**disabled) do
+            RubyUI::SelectValue(placeholder: attributes[:placeholder], id: attributes[:id]) { preselect&.at(0) }
+          end
+
+          RubyUI::SelectContent(outlet_id: attributes[:id]) do
+            RubyUI::SelectGroup() do
+              options.each do |opt|
+                RubyUI::SelectItem(value: opt[1]) { opt[0] }
               end
             end
           end
-        else
-          RubyUI::Select(**attributes) do
-            SelectGroup do
-              options.each do |opt|
-                SelectItem(value: opt) { opt.capitalize }
+        end
+      end
+
+      # options is an array of [ label, value ] pairs
+      # alternatively, supply a block for customization
+      def combobox(options = [], multiple: false, **attributes, &block)
+        RubyUI::Combobox(data: attributes[:data]) do
+          RubyUI::ComboboxTrigger(placeholder: attributes[:placeholder])
+          RubyUI::ComboboxPopover() do
+            RubyUI::ComboboxSearchInput(placeholder: attributes[:placeholder])
+            RubyUI::ComboboxList() do
+              RubyUI::ComboboxEmptyState { "No results" }
+              if multiple
+               RubyUI::ComboboxItem() do
+                  RubyUI::ComboboxToggleAllCheckbox(name: "all", value: "all")
+                  span { "Select all" }
+                end
+              end
+              if block_given?
+                yield block
+              else
+                options.each do |opt|
+                  RubyUI::ComboBoxItem() do
+                    if multiple
+                      RubyUI::ComboboxCheckbox(name: attributes[:name, value: opt[1]])
+                    else
+                      RubyUI::ComboboxRadio(name: attributes[:name], value: opt[1])
+                    end
+                    span { opt[0] }
+                  end
+                end
               end
             end
           end

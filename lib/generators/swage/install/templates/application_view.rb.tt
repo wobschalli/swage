@@ -6,6 +6,8 @@ module Views
       include Phlex::Rails::Helpers::CSRFMetaTags
       include Phlex::Rails::Helpers::StyleSheetLinkTag
       include Phlex::Rails::Helpers::JavaScriptImportmapTags
+      include Phlex::Rails::Helpers::Notice
+      include Phlex::Rails::Helpers::Flash
 
       def initialize(view)
         @view = view
@@ -34,8 +36,19 @@ module Views
             stylesheet_link_tag "tailwind", "data-turbo-track": "reload"
             javascript_importmap_tags
           end
-          body do
-            div id: "body", &block
+          main do
+            div id: "notices" do
+              flash.each do |type, message|
+                var = convert_variants(type)
+                RubyUI::Alert(variant: var) do
+                  RubyUI::AlertTitle { variant_title(var) }
+                  RubyUI::AlertDescription() { message }
+                end
+              end
+            end
+            body do
+              div id: "body", &block
+            end
           end
         end
       end

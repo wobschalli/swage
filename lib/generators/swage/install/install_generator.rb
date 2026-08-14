@@ -110,6 +110,10 @@ module Swage::Generators
       template "base_component.rb.tt", File.join(destination_root, "app/components/base.rb"), force: true if @override
     end
 
+    def create_flash_component
+      template "flash.rb.tt", File.join(destination_root, "app/components/flash.rb"), force: true if @override
+    end
+
     def create_base_view
       template "base_view.rb.tt", File.join(destination_root, "app/views/base.rb"), force: true if @override
     end
